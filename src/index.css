@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.boxBorder {
+    border: 1px solid #424242;
+}
