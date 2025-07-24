@@ -10,9 +10,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch users data with the correct base URL
-    const baseUrl = import.meta.env.DEV ? '' : '/vite-react-e-commerce';
-    axios.get(`${baseUrl}/users.json`)
+    // Fetch users data
+    axios.get('./users.json')
       .then(response => {
         setUsers(response.data);
       })
@@ -37,8 +36,10 @@ const Login = () => {
       setMessage("Login successful!");
       // Store user info in localStorage
       localStorage.setItem('user', JSON.stringify(user));
-      // Force a page reload to update the header with the new user info
-      window.location.href = import.meta.env.DEV ? "/" : "/vite-react-e-commerce/";
+      // Navigate to home page
+      setTimeout(() => {
+        navigate('/');
+      }, 1000);
     } else {
       setMessage("Invalid email or password");
     }

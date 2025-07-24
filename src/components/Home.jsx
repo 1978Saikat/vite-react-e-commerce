@@ -18,13 +18,12 @@ const Home = () => {
         const user = JSON.parse(localStorage.getItem('user'));
         setIsLoggedIn(!!user);
 
-        // Load wishlist from localStorage
+        // Load wishlist
         const savedWishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
         setWishlist(savedWishlist);
 
-        // Fetch products with the correct base URL
-        const baseUrl = import.meta.env.DEV ? '' : '/vite-react-e-commerce';
-        axios.get(`${baseUrl}/data.json`)
+        // Fetch products
+        axios.get('./data.json')
             .then((response) => {
                 setProducts(response.data.products);
             })

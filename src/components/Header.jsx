@@ -48,7 +48,7 @@ const Header = () => {
         setIsLoggedIn(false);
         setUserName("");
         setDropdownVisible(false);
-        navigate("/");
+        navigate('/');
     };
 
     const handleUserIconClick = () => {
@@ -62,13 +62,13 @@ const Header = () => {
     const handleRegisterClick = () => {
         setDropdownVisible(false);
         setMobileMenuVisible(false);
-        navigate("/register");
+        navigate('/register');
     };
 
     const handleLoginClick = () => {
         setDropdownVisible(false);
         setMobileMenuVisible(false);
-        navigate("/login");
+        navigate('/login');
     };
 
     // Navigation Links Component

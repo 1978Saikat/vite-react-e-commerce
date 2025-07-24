@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Search from './components/Search';
@@ -9,24 +9,22 @@ import Login from './components/Login';
 import ProductDetail from './components/ProductDetail';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <Router>
+    <HashRouter>
       <Header />
       <Routes>
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/" element={
           <>
             <Search />
             <Home />
           </>
         } />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
       </Routes>
       <Footer />
-    </Router>
+    </HashRouter>
   );
 }
 

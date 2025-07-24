@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,13 +14,16 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     axios
-      .get("/data.json")
+      .get("./data.json")
       .then((response) => {
         setProducts(response.data.products);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
+        setLoading(false);
       });
   }, []);
 
@@ -193,7 +197,8 @@ const Search = () => {
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredProducts.map((product) => (
-                <div
+                <Link
+                  to={`/product/${product.id}`}
                   key={product.id}
                   className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow"
                 >
@@ -216,7 +221,7 @@ const Search = () => {
                       {product.discountPercentage}% off
                     </span>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
