@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Search from './components/Search';
@@ -9,8 +9,13 @@ import Login from './components/Login';
 import ProductDetail from './components/ProductDetail';
 
 function App() {
+  // Determine if we're running on GitHub Pages
+  const isGitHubPages = window.location.hostname === "1978saikat.github.io";
+  const Router = isGitHubPages ? HashRouter : BrowserRouter;
+  const basename = isGitHubPages ? "/vite-react-e-commerce" : "/";
+
   return (
-    <HashRouter>
+    <Router basename={basename}>
       <Header />
       <Routes>
         <Route path="/" element={
@@ -24,7 +29,7 @@ function App() {
         <Route path="/product/:id" element={<ProductDetail />} />
       </Routes>
       <Footer />
-    </HashRouter>
+    </Router>
   );
 }
 

@@ -3,6 +3,7 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { getDataUrl } from "../utils/config";
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,7 +17,7 @@ const Search = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("./data.json")
+      .get(getDataUrl('data.json'))
       .then((response) => {
         setProducts(response.data.products);
         setLoading(false);
