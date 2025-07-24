@@ -9,6 +9,7 @@ import {
     faCompressAlt 
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { getDataUrl } from '../utils/config';
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -24,32 +25,85 @@ const ProductDetail = () => {
         { id: 1, user: "John Doe", rating: 4.5, comment: "Great product, exactly as described!", date: "2024-02-15" },
         { id: 2, user: "Jane Smith", rating: 5, comment: "Excellent quality and fast delivery!", date: "2024-02-14" },
     ]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Check login status
-        const user = JSON.parse(localStorage.getItem('user'));
-        setIsLoggedIn(!!user);
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                setError(null);
 
-        // Load wishlist
-        const savedWishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-        setWishlist(savedWishlist);
+                // Check login status
+                const user = JSON.parse(localStorage.getItem('user'));
+                setIsLoggedIn(!!user);
 
-        // Load compare list
-        const savedCompareList = JSON.parse(localStorage.getItem('compareList')) || [];
-        setCompareList(savedCompareList);
+                // Load wishlist
+                const savedWishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+                setWishlist(savedWishlist);
 
-        // Fetch product data
-        axios.get('./data.json')
-            .then((response) => {
-                const foundProduct = response.data.products.find(p => p.id === parseInt(id));
-                if (foundProduct) {
-                    setProduct(foundProduct);
+                // Load compare list
+                const savedCompareList = JSON.parse(localStorage.getItem('compareList')) || [];
+                setCompareList(savedCompareList);
+
+                // Fetch product data
+                const response = await axios.get(getDataUrl('data.json'));
+                if (response.data && response.data.products) {
+                    const foundProduct = response.data.products.find(p => p.id === parseInt(id));
+                    if (foundProduct) {
+                        setProduct(foundProduct);
+                    } else {
+                        setError('Product not found');
+                    }
+                } else {
+                    setError('Invalid data format');
                 }
-            })
-            .catch((error) => {
+            } catch (error) {
                 console.error("Error fetching product:", error);
-            });
+                setError('Error loading product data');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
     }, [id]);
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex flex-col justify-center items-center min-h-screen">
+                <p className="text-red-500 mb-4">{error}</p>
+                <button 
+                    onClick={() => navigate('/')}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                    Return to Home
+                </button>
+            </div>
+        );
+    }
+
+    if (!product) {
+        return (
+            <div className="flex flex-col justify-center items-center min-h-screen">
+                <p className="text-gray-500 mb-4">Product not found</p>
+                <button 
+                    onClick={() => navigate('/')}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                    Return to Home
+                </button>
+            </div>
+        );
+    }
 
     const handleMouseMove = (e) => {
         if (!isZoomed) return;
@@ -124,14 +178,6 @@ const ProductDetail = () => {
 
         return stars;
     };
-
-    if (!product) {
-        return (
-            <div className="flex justify-center items-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-            </div>
-        );
-    }
 
     // Sample images array (in real app, this would come from your product data)
     const productImages = [
