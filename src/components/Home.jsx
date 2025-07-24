@@ -22,9 +22,9 @@ const Home = () => {
         const savedWishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
         setWishlist(savedWishlist);
 
-        // Fetch products
-        axios
-            .get("/data.json")
+        // Fetch products with the correct base URL
+        const baseUrl = import.meta.env.DEV ? '' : '/vite-react-e-commerce';
+        axios.get(`${baseUrl}/data.json`)
             .then((response) => {
                 setProducts(response.data.products);
             })

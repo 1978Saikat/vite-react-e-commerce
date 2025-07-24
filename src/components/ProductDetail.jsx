@@ -38,8 +38,9 @@ const ProductDetail = () => {
         const savedCompareList = JSON.parse(localStorage.getItem('compareList')) || [];
         setCompareList(savedCompareList);
 
-        // Fetch product data
-        axios.get("/data.json")
+        // Fetch product data with the correct base URL
+        const baseUrl = import.meta.env.DEV ? '' : '/vite-react-e-commerce';
+        axios.get(`${baseUrl}/data.json`)
             .then((response) => {
                 const foundProduct = response.data.products.find(p => p.id === parseInt(id));
                 if (foundProduct) {

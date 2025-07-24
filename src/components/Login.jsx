@@ -1,12 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import usersData from "/public/users.json";
+import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch users data with the correct base URL
+    const baseUrl = import.meta.env.DEV ? '' : '/vite-react-e-commerce';
+    axios.get(`${baseUrl}/users.json`)
+      .then(response => {
+        setUsers(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching users:", error);
+      });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,7 +29,7 @@ const Login = () => {
       return;
     }
 
-    const user = usersData.find(
+    const user = users.find(
       (user) => user.email === email && user.password === password
     );
 
@@ -25,7 +38,7 @@ const Login = () => {
       // Store user info in localStorage
       localStorage.setItem('user', JSON.stringify(user));
       // Force a page reload to update the header with the new user info
-      window.location.href = "/";
+      window.location.href = import.meta.env.DEV ? "/" : "/vite-react-e-commerce/";
     } else {
       setMessage("Invalid email or password");
     }
