@@ -15,14 +15,21 @@ const Header = () => {
     const userIconRef = useRef(null);
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user) {
-            setIsLoggedIn(true);
-            setUserName(user.name);
-        } else {
-            setIsLoggedIn(false);
-            setUserName("");
+        const checkUser = () => {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (user) {
+              setIsLoggedIn(true);
+              setUserName(user.name);
+            } else {
+              setIsLoggedIn(false);
+              setUserName("");
+            }
         }
+        checkUser();
+        window.addEventListener("user-login", checkUser);
+        return () => {
+            window.removeEventListener("user-login", checkUser);
+        };
     }, []);
 
     useEffect(() => {

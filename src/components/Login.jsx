@@ -36,6 +36,7 @@ const Login = () => {
       setMessage("Login successful!");
       // Store user info in localStorage
       localStorage.setItem('user', JSON.stringify(user));
+      window.dispatchEvent(new Event("user-login"));
       // Navigate to home page
       setTimeout(() => {
         navigate('/');
